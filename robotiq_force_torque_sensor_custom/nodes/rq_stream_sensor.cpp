@@ -1,5 +1,5 @@
 #include "ros/ros.h"
-#include "robotiq_force_torque_sensor/sensor_accessor.h"
+#include "robotiq_force_torque_sensor_custom/sensor_accessor.h"
 #include <sstream>
 #include "geometry_msgs/WrenchStamped.h"
 #include "eigen3/Eigen/Core"
@@ -67,8 +67,8 @@ int main(int argc, char **argv)
 	ros::NodeHandle n;
 
 	/* Service to bias sensor */
-	ros::ServiceClient client          = n.serviceClient<robotiq_force_torque_sensor::sensor_accessor>("robotiq_force_torque_sensor_acc");	
-	robotiq_force_torque_sensor::sensor_accessor srv;
+	ros::ServiceClient client          = n.serviceClient<robotiq_force_torque_sensor_custom::sensor_accessor>("robotiq_force_torque_sensor_acc");	
+	robotiq_force_torque_sensor_custom::sensor_accessor srv;
 
 	/* Subscriber and publisher to filter signal */
 	ros::Subscriber  sub_input_wrench           = n.subscribe("robotiq_force_torque_wrench", 1000, UpdateInputWrench, ros::TransportHints().reliable().tcpNoDelay());

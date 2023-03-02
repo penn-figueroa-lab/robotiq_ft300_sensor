@@ -47,10 +47,10 @@
 #include "std_msgs/String.h"
 #include "geometry_msgs/WrenchStamped.h"
 #include "robotiq_force_torque_sensor/rq_sensor_state.h"
-#include "robotiq_force_torque_sensor/ft_sensor.h"
-#include "robotiq_force_torque_sensor/sensor_accessor.h"
+#include "robotiq_force_torque_sensor_custom/ft_sensor.h"
+#include "robotiq_force_torque_sensor_custom/sensor_accessor.h"
 
-typedef robotiq_force_torque_sensor::sensor_accessor::Request Request;
+typedef robotiq_force_torque_sensor_custom::sensor_accessor::Request Request;
 static int max_retries_(100);
 std::string ftdi_id;
 
@@ -63,8 +63,8 @@ ros::Publisher sensor_pub_acc;
  * @param res result with requested data
  * @return true iff a valid command_id was given in the request
  */
-static bool decode_message_and_do(robotiq_force_torque_sensor::sensor_accessor::Request& req,
-								  robotiq_force_torque_sensor::sensor_accessor::Response& res)
+static bool decode_message_and_do(robotiq_force_torque_sensor_custom::sensor_accessor::Request& req,
+								  robotiq_force_torque_sensor_custom::sensor_accessor::Response& res)
 {
 	INT_8 buffer[100];
 	res.success = rq_state_get_command(req.command_id, buffer);
@@ -116,8 +116,8 @@ static void decode_message_and_do(INT_8 const  * const buff, INT_8 * const ret)
 	}
 }
 
-bool receiverCallback(robotiq_force_torque_sensor::sensor_accessor::Request& req,
-	robotiq_force_torque_sensor::sensor_accessor::Response& res)
+bool receiverCallback(robotiq_force_torque_sensor_custom::sensor_accessor::Request& req,
+	robotiq_force_torque_sensor_custom::sensor_accessor::Response& res)
 {
 	/// Support for old string-based interface
 	if (req.command.length())
@@ -175,9 +175,9 @@ static void wait_for_other_connection()
  * \brief Builds the message with the force/torque data
  * \return ft_sensor updated with the latest data
  */
-static robotiq_force_torque_sensor::ft_sensor get_data(void)
+static robotiq_force_torque_sensor_custom::ft_sensor get_data(void)
 {
-	robotiq_force_torque_sensor::ft_sensor msgStream;
+	robotiq_force_torque_sensor_custom::ft_sensor msgStream;
 
 	msgStream.Fx = rq_state_get_received_data(0);
 	msgStream.Fy = rq_state_get_received_data(1);
@@ -205,7 +205,7 @@ int main(int argc, char **argv)
     }
 
 	INT_8 bufStream[512];
-	robotiq_force_torque_sensor::ft_sensor msgStream;
+	robotiq_force_torque_sensor_custom::ft_sensor msgStream;
 	INT_8 ret;
 
 	//If we can't initialize, we return an error
@@ -229,7 +229,7 @@ int main(int argc, char **argv)
 		wait_for_other_connection();
 	}
 
-	ros::Publisher sensor_pub = n.advertise<robotiq_force_torque_sensor::ft_sensor>("robotiq_force_torque_sensor", 512);
+	ros::Publisher sensor_pub = n.advertise<robotiq_force_torque_sensor_custom::ft_sensor>("robotiq_force_torque_sensor", 512);
 	ros::Publisher wrench_pub = n.advertise<geometry_msgs::WrenchStamped>("robotiq_force_torque_wrench", 512);
 	ros::ServiceServer service = n.advertiseService("robotiq_force_torque_sensor_acc", receiverCallback);
 
