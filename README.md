@@ -21,7 +21,7 @@
 ## Usage
 - Calibration/Zero
   ```
-  rosservice call /robotiq_force_torque_sensor_acc "command_id: 8
+  rosservice call /robotiq_force_torque_sensor_acc "command_id: 8"
   ```
 - To stream the custom FT sensor message, `/robotiq_force_torque_sensor`, which has of the following format:
     ```bash
